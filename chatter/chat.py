@@ -46,6 +46,10 @@ class ENG_SM:
     ISO_639 = "eng"
     ENGLISH_NAME = "English"
 
+class FR_LG:
+    ISO_639_1 = "fr_core_news_lg"
+    ISO_639 = "fre"
+    ENGLISH_NAME = "French"
 
 class Chatter(Cog):
     """
@@ -71,7 +75,7 @@ class Chatter(Cog):
         # TODO: Move training_model and similarity_algo to config
         # TODO: Add an option to see current settings
 
-        self.tagger_language = ENG_MD
+        self.tagger_language = FR_LG
         self.similarity_algo = SpacySimilarity
         self.similarity_threshold = 0.90
         self.chatbot = self._create_chatbot()
@@ -206,6 +210,14 @@ class Chatter(Cog):
         trainer = ChatterBotCorpusTrainer(self.chatbot)
         # try:
         trainer.train("chatterbot.corpus.english")
+        # except:
+        #     return False
+        return True
+
+    def _train_french(self):
+        trainer = ChatterBotCorpusTrainer(self.chatbot)
+        # try:
+        trainer.train("chatterbot.corpus.french")
         # except:
         #     return False
         return True
@@ -366,15 +378,16 @@ class Chatter(Cog):
         0: Small
         1: Medium
         2: Large (Requires additional setup)
+        3: Large FR
         """
 
-        models = [ENG_SM, ENG_MD, ENG_LG]
+        models = [ENG_SM, ENG_MD, ENG_LG, FR_LG]
 
-        if model_number < 0 or model_number > 2:
+        if model_number < 0 or model_number > 3:
             await ctx.send_help()
             return
 
-        if model_number == 2:
+        if model_number == 2 or model_number == 3:
             await ctx.maybe_send_embed(
                 "Additional requirements needed. See guide before continuing.\n" "Continue?"
             )
@@ -552,6 +565,19 @@ class Chatter(Cog):
 
         if future:
             await ctx.maybe_send_embed("Training successful!")
+        else:
+            await ctx.maybe_send_embed("Error occurred :(")
+
+    @chatter_train.command(name="french")
+    async def chatter_train_french(self, ctx: commands.Context):
+        """
+        Trains the bot in french
+        """
+        async with ctx.typing():
+            future = await self.loop.run_in_executor(None, self._train_french)
+
+            await ctx.maybe_send_embed("Training successful!")
+        if future:
         else:
             await ctx.maybe_send_embed("Error occurred :(")
 
