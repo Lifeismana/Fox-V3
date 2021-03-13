@@ -657,8 +657,7 @@ class Chatter(Cog):
 
         ctx: commands.Context = await self.bot.get_context(message)
 
-        if ctx.prefix is not None:  # Probably unnecessary, we're in on_message_without_command
-            return
+        #  this is a shitty idea ctx.prefix is not None and ctx.prefix is not f"<@{self.bot.user.id}>"
 
         ###########
         # Thank you Cog-Creators
