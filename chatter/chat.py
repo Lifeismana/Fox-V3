@@ -576,8 +576,8 @@ class Chatter(Cog):
         async with ctx.typing():
             future = await self.loop.run_in_executor(None, self._train_french)
 
-            await ctx.maybe_send_embed("Training successful!")
         if future:
+            await ctx.maybe_send_embed("Training successful!")
         else:
             await ctx.maybe_send_embed("Error occurred :(")
 
