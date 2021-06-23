@@ -454,7 +454,7 @@ class Chatter(Cog):
         if future:
             await ctx.maybe_send_embed(f"Backup successful! Look in {path} for your backup")
         else:
-            await ctx.maybe_send_embed("Error occurred :(")
+            await ctx.maybe_send_embed(f"Error occurred :( {future}")
 
     @commands.is_owner()
     @chatter.group(name="train")
